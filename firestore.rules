@@ -1,0 +1,83 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users
+    // Document ID: {userId}
+    // Fields:
+    //   - name: string (required)
+    //   - learningStyle: string (enum: visual, auditory, reading, kinesthetic)
+    //   - goals: string
+    //   - level: string (enum: beginner, intermediate, advanced)
+    //   - subject: string (required)
+    //   - xp: number (required, positive)
+    //   - rank: number (required, positive)
+    //   - streak: number (positive)
+    //   - completedSteps: list of strings
+    //   - mutations: list of strings
+    //   - dailyQuests: list of maps (label, xp, done)
+    //   - currentPath: map (subject, steps: list of maps)
+    //   - completedPathways: list of maps
+    //   - schedule: map (day, items: list of maps)
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+          (request.auth.token.email == "viljonkumar@gmail.com" && request.auth.token.email_verified == true));
+    }
+
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    function isValidUser(data) {
+      return hasOnlyAllowedFields(['name', 'learningStyle', 'goals', 'level', 'subject', 'xp', 'rank', 'streak', 'completedSteps', 'mutations', 'dailyQuests', 'currentPath', 'role', 'completedPathways', 'schedule']) &&
+             data.name is string && data.name.size() > 0 && data.name.size() < 100 &&
+             data.subject is string && data.subject.size() >= 0 && data.subject.size() < 100 &&
+             data.xp is int && data.xp >= 0 &&
+             data.rank is int && data.rank > 0 &&
+             (!('learningStyle' in data) || data.learningStyle in ['visual', 'auditory', 'reading', 'kinesthetic']) &&
+             (!('level' in data) || data.level in ['beginner', 'intermediate', 'advanced']) &&
+             (!('streak' in data) || (data.streak is int && data.streak >= 0)) &&
+             (!('completedSteps' in data) || data.completedSteps is list) &&
+             (!('mutations' in data) || data.mutations is list) &&
+             (!('dailyQuests' in data) || data.dailyQuests is list) &&
+             (!('currentPath' in data) || (data.currentPath is map || data.currentPath == null)) &&
+             (!('completedPathways' in data) || data.completedPathways is list) &&
+             (!('schedule' in data) || (data.schedule is map || data.schedule == null));
+    }
+
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      
+      allow create: if isOwner(userId) && 
+                      isValidUser(request.resource.data) && 
+                      (!('role' in request.resource.data) || request.resource.data.role == 'user');
+                      
+      allow update: if (isOwner(userId) || isAdmin()) && 
+                      isValidUser(request.resource.data) && 
+                      (isAdmin() || request.resource.data.role == resource.data.role);
+                      
+      allow delete: if isAdmin();
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Stores user information, preferences, and learning statistics.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "learningStyle": { "type": "string", "enum": ["visual", "auditory", "reading", "kinesthetic"] },
+        "goals": { "type": "string" },
+        "level": { "type": "string", "enum": ["beginner", "intermediate", "advanced"] },
+        "subject": { "type": "string" },
+        "xp": { "type": "integer" },
+        "rank": { "type": "integer" },
+        "streak": { "type": "integer" },
+        "completedSteps": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "mutations": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "dailyQuests": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": { "type": "string" },
+              "xp": { "type": "integer" },
+              "done": { "type": "boolean" }
+            }
+          }
+        },
+        "currentPath": {
+          "type": "object",
+          "properties": {
+            "subject": { "type": "string" },
+            "steps": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "content": { "type": "string" },
+                  "method": { "type": "string" },
+                  "difficulty": { "type": "string" },
+                  "estimatedTime": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "required": ["name", "subject", "xp", "rank"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "The user's profile and learning state."
+    }
+  }
+}
