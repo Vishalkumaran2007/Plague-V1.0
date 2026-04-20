@@ -78,6 +78,8 @@ PLAGUE is a personalized learning platform designed to address diverse learning 
 
 PLAGUE aims to transform learning into a continuously adaptive and personalized experience.
 
+---
+
 ## Run Locally
 
 **Prerequisites:**  Node.js
