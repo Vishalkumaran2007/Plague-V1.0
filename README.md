@@ -92,8 +92,12 @@ PLAGUE aims to transform learning into a continuously adaptive and personalized 
    `npm run dev`
 
 ---
-## ** Project By **
-Vishalkumaran V
-Viljon Kumar J
-Karthikeyan A S
-Hitesh Raj R L
+## Project By
+
+**Vishalkumaran V**
+
+**Viljon Kumar J**
+
+**Karthikeyan AS**
+
+**Hitesh Raj RL**
