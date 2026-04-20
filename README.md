@@ -35,17 +35,6 @@ PLAGUE is a personalized learning platform designed to address diverse learning 
 
 ---
 
-## Project Structure  
-
-src/  
- ├── lib/           Utility functions  
- ├── services/      AI and backend services  
- ├── App.tsx        Main application component  
- ├── main.tsx       Entry point  
- ├── index.css      Styles  
-
----
-
 ## How It Works  
 
 1. User interacts with the platform  
