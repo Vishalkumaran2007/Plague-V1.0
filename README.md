@@ -7,9 +7,6 @@ AI-powered system that adapts learning paths based on student behavior, progress
 ## Overview  
 PLAGUE is a personalized learning platform designed to address diverse learning needs in Indian classrooms. It dynamically adjusts content difficulty, pace, and teaching methods using real-time student interaction data.
 
-\[
-\text{Learning Impact} = \text{Personalization} \times \text{Adaptability}
-\]
 
 ---
 
@@ -56,9 +53,6 @@ src/
 3. AI analyzes learning patterns  
 4. System adapts content dynamically  
 
-\[
-P = f(\text{accuracy}, \text{time}, \text{engagement})
-\]
 
 ---
 
@@ -83,9 +77,6 @@ P = f(\text{accuracy}, \text{time}, \text{engagement})
 - Real-time adaptation requires efficient data flow design  
 - AI effectiveness depends on context-aware responses  
 
-\[
-\text{Efficiency} = \frac{\text{Personalized Output}}{\text{Latency} + \text{Complexity}}
-\]
 
 ---
 
